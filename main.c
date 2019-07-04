@@ -19,6 +19,7 @@ void defaultModesArray();
 void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantValues);
 void findModesToBeFitted();
 bool isFittable(int l, int n);
+int primeModeSearch(int l, int n, int depth);
 void printModesToBeFitted();
 void printAllModes();
 
@@ -39,7 +40,6 @@ int main(int argc, char *argv[])
   findModesToBeFitted();
 
   // print fittable modes
-  //printAllModes();
   printModesToBeFitted();
 
   return 0;
@@ -122,18 +122,50 @@ bool isFittable(int l, int n)
   int fittedModesFound = 0;
 
   // check if adjacent modes has been fitted
-  if (modes[l][n + 1].fitted) fittedModesFound++; // top
-  if (modes[l][n - 1].fitted) fittedModesFound++; // bottom
-  if (modes[l - 1][n].fitted) fittedModesFound++; // left
-  if (modes[l + 1][n].fitted) fittedModesFound++; // right
-  
+  if (modes[l][n + 1].fitted) fittedModesFound++; // right
+  if (modes[l][n - 1].fitted) fittedModesFound++; // left
+  if (modes[l - 1][n].fitted) fittedModesFound++; // top
+  if (modes[l + 1][n].fitted) fittedModesFound++; // bottom
+
   // if three or more fitted modes are found adjacent, set missing mode to be fitted
   if (fittedModesFound >= 3)
   {
     return true;
   }
+  else
+  {
+    int deepFittedModesFound = primeModeSearch(l, n, 1100);
+    if (deepFittedModesFound >= 3)
+      //printf("%d\n", deepFittedModesFound);
+      return true;
+  }
 
   return false;
+}
+
+int primeModeSearch(int l, int n, int depth)
+{
+  bool foundTop = false;
+  bool foundBottom = false;
+  bool foundLeft = false;
+  bool foundRight = false;
+  int found = 0;
+  int i;
+  
+  for (i = 0; i < depth; i++)
+  {
+    if (n + i <= NCOLUMNS && modes[l][n + i].fitted) foundRight = true; // right
+    if (n - i >= 0 && modes[l][n - i].fitted) foundLeft = true; // left
+    if (l - i >= 0 && modes[l - i][n].fitted) foundTop = true; // top
+    if (l + i <= LROWS + 1 && modes[l + i][n].fitted) foundBottom = true; // bottom
+  }
+
+  if (foundTop) found++;
+  if (foundBottom) found++;
+  if (foundLeft) found++;
+  if (foundRight) found++;
+  
+  return found;
 }
 
 void printModesToBeFitted()
