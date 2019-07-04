@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define LROWS 1000
-#define NCOLUMNS 29
+#define LROWS 1001
+#define NCOLUMNS 30
 
 typedef struct
 {
@@ -48,9 +48,10 @@ int main(int argc, char *argv[])
 void defaultModesArray()
 {
   // iterates through modes and sets all mode values to false
-  for (int l = 0; l < LROWS; l++)
+  int l, n;
+  for (l = 0; l < LROWS; l++)
   {
-    for (int n = 0; n < NCOLUMNS; n++)
+    for (n = 0; n < NCOLUMNS; n++)
     {
       modes[l][n].fitted = false;
       modes[l][n].missing = false;
@@ -103,9 +104,10 @@ void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantVa
 void findModesToBeFitted()
 {
   // iterates through all missing modes
-  for (int l = 0; l < LROWS; l++)
+  int l, n;
+  for (l = 0; l < LROWS; l++)
   {
-    for (int n = 0; n < NCOLUMNS; n++)
+    for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].missing)
       {
@@ -122,8 +124,8 @@ bool isFittable(int l, int n)
   // check if adjacent modes has been fitted
   if (modes[l][n + 1].fitted) fittedModesFound++; // top
   if (modes[l][n - 1].fitted) fittedModesFound++; // bottom
-  if (modes[l - 1][n + 1].fitted) fittedModesFound++; // left
-  if (modes[l + 1][n - 1].fitted) fittedModesFound++; // right
+  if (modes[l - 1][n].fitted) fittedModesFound++; // left
+  if (modes[l + 1][n].fitted) fittedModesFound++; // right
   
   // if three or more fitted modes are found adjacent, set missing mode to be fitted
   if (fittedModesFound >= 3)
@@ -136,9 +138,10 @@ bool isFittable(int l, int n)
 
 void printModesToBeFitted()
 {
-  for (int l = 0; l < LROWS; l++)
+  int l, n;
+  for (l = 0; l < LROWS; l++)
   {
-    for (int n = 0; n < NCOLUMNS; n++)
+    for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].toBeFitted)
       {
@@ -150,9 +153,10 @@ void printModesToBeFitted()
 
 void printAllModes()
 {
-  for (int l = 0; l < LROWS; l++)
+  int l, n;
+  for (l = 0; l < LROWS; l++)
   {
-    for (int n = 0; n < NCOLUMNS; n++)
+    for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].fitted)
       {
