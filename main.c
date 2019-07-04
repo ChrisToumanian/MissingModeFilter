@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include "bitmap.c"
 
 #define LROWS 1001
 #define NCOLUMNS 30
@@ -14,6 +15,8 @@ typedef struct
 } Mode;
 
 Mode modes[LROWS][NCOLUMNS];
+bool exportImageOption;
+char *bitmapFileName;
 
 void defaultModesArray();
 void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantValues);
@@ -22,13 +25,27 @@ bool isFittable(int l, int n);
 int primeModeSearch(int l, int n, int depth);
 void printModesToBeFitted();
 void printAllModes();
+void exportImage();
 
 int main(int argc, char *argv[])
 {
   char *fittedModesFile = argv[1];
   char *missingModesFile = argv[2];
   char *modesToBeFitted = "";
+  int commandCount = 0;
+  int i;
 
+  // commands
+  while (argv[++commandCount] != NULL);
+  for (i = 0; i < commandCount; i++)
+  {
+    if (strcmp(argv[i], "-i") == 0) // export image
+    {
+      exportImageOption = true;
+      bitmapFileName = argv[i + 1];
+    }
+  }
+  
   // sets all modes in array to not fitted and not missing
   defaultModesArray();
 
@@ -42,6 +59,9 @@ int main(int argc, char *argv[])
   // print fittable modes
   printModesToBeFitted();
 
+  // export image
+  if (exportImageOption) exportImage();
+  
   return 0;
 }
 
@@ -157,7 +177,7 @@ int primeModeSearch(int l, int n, int depth)
     if (n + i <= NCOLUMNS && modes[l][n + i].fitted) foundRight = true; // right
     if (n - i >= 0 && modes[l][n - i].fitted) foundLeft = true; // left
     if (l - i >= 0 && modes[l - i][n].fitted) foundTop = true; // top
-    if (l + i <= LROWS + 1 && modes[l + i][n].fitted) foundBottom = true; // bottom
+    if (l + i <= LROWS && modes[l + i][n].fitted) foundBottom = true; // bottom
   }
 
   if (foundTop) found++;
@@ -209,4 +229,40 @@ void printAllModes()
     }
     printf("\n");
   }
+}
+
+void exportImage()
+{
+  unsigned char fittedColor = 255;
+  unsigned char toBeFittedColor = 175;
+  unsigned char missingColor = 75;
+  unsigned char nullColor = 0;
+  unsigned char image[LROWS][NCOLUMNS];
+
+  // Set each pixel's value
+  for (int l = 0; l < LROWS; l++)
+  {
+    for (int n = 0; n < NCOLUMNS; n++)
+    {
+      if (modes[l][n].toBeFitted)
+      {
+	image[l][n] = toBeFittedColor;
+      }
+      else if (modes[l][n].fitted)
+      {
+	image[l][n] = fittedColor;
+      }
+      else if (modes[l][n].missing)
+      {
+	image[l][n] = missingColor;
+      }
+      else
+      {
+	image[l][n] = nullColor;
+      }
+    }
+  }
+
+  // use bitmap.c to save image
+  saveImageBitmap(bitmapFileName, LROWS, NCOLUMNS, image);
 }
