@@ -18,7 +18,6 @@ Mode modes[LROWS][NCOLUMNS];
 bool exportImageOption;
 char *bitmapFileName;
 
-void defaultModesArray();
 void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantValues);
 void findModesToBeFitted();
 bool isFittable(int l, int n);
@@ -46,9 +45,6 @@ int main(int argc, char *argv[])
     }
   }
   
-  // sets all modes in array to not fitted and not missing
-  defaultModesArray();
-
   // adds fitted and missing modes from files to modes array
   addModesFromFile(fittedModesFile, true, false, false);
   addModesFromFile(missingModesFile, false, true, true);
@@ -63,21 +59,6 @@ int main(int argc, char *argv[])
   if (exportImageOption) exportImage();
   
   return 0;
-}
-
-void defaultModesArray()
-{
-  // iterates through modes and sets all mode values to false
-  int l, n;
-  for (l = 0; l < LROWS; l++)
-  {
-    for (n = 0; n < NCOLUMNS; n++)
-    {
-      modes[l][n].fitted = false;
-      modes[l][n].missing = false;
-      modes[l][n].toBeFitted = false;
-    }
-  }
 }
 
 void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantValues)
@@ -164,25 +145,65 @@ bool isFittable(int l, int n)
 
 int primeModeSearch(int l, int n, int depth)
 {
-  bool foundTop = false;
-  bool foundBottom = false;
+  bool foundUp = false;
+  bool foundDown = false;
   bool foundLeft = false;
   bool foundRight = false;
   int found = 0;
   int i;
 
   // searches for modes in 4 directions across 2D array and marks the directions found as true
-  for (i = 0; i < depth; i++)
+  /* for (i = 0; i < depth; i++)
   {
     if (n + i <= NCOLUMNS && modes[l][n + i].fitted) foundRight = true; // right
     if (n - i >= 0 && modes[l][n - i].fitted) foundLeft = true; // left
-    if (l - i >= 0 && modes[l - i][n].fitted) foundTop = true; // top
-    if (l + i <= LROWS && modes[l + i][n].fitted) foundBottom = true; // bottom
+    if (l - i >= 0 && modes[l - i][n].fitted) foundUp = true; // up
+    if (l + i <= LROWS && modes[l + i][n].fitted) foundDown = true; // down
+  } */
+
+  // search up
+  for (i = 0; i < depth; i++)
+  {
+    if (l - i >= 0 && modes[l - i][n].fitted)
+    {
+      foundUp = true;
+      break;
+    }
   }
 
+  // search down
+  for (i = 0; i < depth; i++)
+  {
+    if (l + i <= LROWS && modes[l + i][n].fitted)
+    {
+      foundDown = true;
+      break;
+    }
+  }
+
+  // search left
+  for (i = 0; i < depth; i++)
+  {
+    if (n - i >= 0 && modes[l][n - i].fitted)
+    {
+      foundLeft = true;
+      break;
+    }
+  }
+
+  // search right
+  for (i = 0; i < depth; i++)
+  {
+    if (n + i <= NCOLUMNS && modes[l][n + i].fitted)
+    {
+      foundRight = true;
+      break;
+    }
+  }
+  
   // sets number of found modes
-  if (foundTop) found++;
-  if (foundBottom) found++;
+  if (foundUp) found++;
+  if (foundDown) found++;
   if (foundLeft) found++;
   if (foundRight) found++;
   
