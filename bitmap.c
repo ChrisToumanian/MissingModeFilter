@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-int test;
-
 void saveImageBitmap(char* filename, int w, int h, unsigned char image[w][h])
 {
   FILE *f;
@@ -24,9 +22,9 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char image[w][h])
       int g = image[i][j];
       int b = image[i][j];
 
-      img[(x + y * w) * 3 + 2] = (unsigned char) (r);
-      img[(x + y * w) * 3 + 1] = (unsigned char) (g);
-      img[(x + y * w) * 3 + 0] = (unsigned char) (b);
+      img[(x + y * w) * 3 + 2] = (unsigned char)(r);
+      img[(x + y * w) * 3 + 1] = (unsigned char)(g);
+      img[(x + y * w) * 3 + 0] = (unsigned char)(b);
     }
   }
 
@@ -34,18 +32,18 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char image[w][h])
   unsigned char bmpinfoheader[40] = {40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 24, 0};
   unsigned char bmppad[3] = {0, 0, 0};
 
-  bmpfileheader[ 2] = (unsigned char)(filesize    );
-  bmpfileheader[ 3] = (unsigned char)(filesize>> 8);
-  bmpfileheader[ 4] = (unsigned char)(filesize>>16);
-  bmpfileheader[ 5] = (unsigned char)(filesize>>24);
-  bmpinfoheader[ 4] = (unsigned char)(       w    );
-  bmpinfoheader[ 5] = (unsigned char)(       w>> 8);
-  bmpinfoheader[ 6] = (unsigned char)(       w>>16);
-  bmpinfoheader[ 7] = (unsigned char)(       w>>24);
-  bmpinfoheader[ 8] = (unsigned char)(       h    );
-  bmpinfoheader[ 9] = (unsigned char)(       h>> 8);
-  bmpinfoheader[10] = (unsigned char)(       h>>16);
-  bmpinfoheader[11] = (unsigned char)(       h>>24);
+  bmpfileheader[2] = (unsigned char)(filesize);
+  bmpfileheader[3] = (unsigned char)(filesize >> 8);
+  bmpfileheader[4] = (unsigned char)(filesize >> 16);
+  bmpfileheader[5] = (unsigned char)(filesize >> 24);
+  bmpinfoheader[4] = (unsigned char)(w);
+  bmpinfoheader[5] = (unsigned char)(w >> 8);
+  bmpinfoheader[6] = (unsigned char)(w >> 16);
+  bmpinfoheader[7] = (unsigned char)(w >> 24);
+  bmpinfoheader[8] = (unsigned char)(h);
+  bmpinfoheader[9] = (unsigned char)(h >> 8);
+  bmpinfoheader[10] = (unsigned char)(h >> 16);
+  bmpinfoheader[11] = (unsigned char)(h >> 24);
 
   f = fopen(filename, "wb");
   fwrite(bmpfileheader, 1, 14, f);
