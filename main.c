@@ -152,15 +152,6 @@ int primeModeSearch(int l, int n, int depth)
   int found = 0;
   int i;
 
-  // searches for modes in 4 directions across 2D array and marks the directions found as true
-  /* for (i = 0; i < depth; i++)
-  {
-    if (n + i <= NCOLUMNS && modes[l][n + i].fitted) foundRight = true; // right
-    if (n - i >= 0 && modes[l][n - i].fitted) foundLeft = true; // left
-    if (l - i >= 0 && modes[l - i][n].fitted) foundUp = true; // up
-    if (l + i <= LROWS && modes[l + i][n].fitted) foundDown = true; // down
-  } */
-
   // search up
   for (i = 0; i < depth; i++)
   {
