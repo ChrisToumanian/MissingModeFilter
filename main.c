@@ -239,11 +239,12 @@ void exportImage()
   unsigned char missingColor = 75;
   unsigned char nullColor = 0;
   unsigned char image[LROWS][NCOLUMNS];
-
+  int l, n;
+  
   // Set each pixel's value
-  for (int l = 0; l < LROWS; l++)
+  for (l = 0; l < LROWS; l++)
   {
-    for (int n = 0; n < NCOLUMNS; n++)
+    for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].toBeFitted)
       {
