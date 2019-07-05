@@ -53,13 +53,13 @@ int main(int argc, char *argv[])
   addModesFromFile(fittedModesFile, true, false, false);
   addModesFromFile(missingModesFile, false, true, true);
 
-  // find modes to be fit and marks them in modes array
+  // finds modes to be fit and marks them in modes array
   findModesToBeFitted();
 
-  // print fittable modes
+  // prints fittable modes
   printModesToBeFitted();
 
-  // export image
+  // exports image if option is set
   if (exportImageOption) exportImage();
   
   return 0;
@@ -117,7 +117,7 @@ void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantVa
     }
   }
 
-  // close file
+  // closes file
   fclose(fptr);
 }
 
@@ -141,13 +141,13 @@ bool isFittable(int l, int n)
 {
   int fittedModesFound = 0;
 
-  // check if adjacent modes has been fitted
+  // checks if adjacent modes have been fitted
   if (modes[l][n + 1].fitted) fittedModesFound++; // right
   if (modes[l][n - 1].fitted) fittedModesFound++; // left
   if (modes[l - 1][n].fitted) fittedModesFound++; // top
   if (modes[l + 1][n].fitted) fittedModesFound++; // bottom
 
-  // if three or more fitted modes are found adjacent, set missing mode to be fitted
+  // if three or more fitted modes are found adjacent, sets missing mode to be fitted
   if (fittedModesFound >= 3)
   {
     return true;
@@ -156,7 +156,6 @@ bool isFittable(int l, int n)
   {
     int deepFittedModesFound = primeModeSearch(l, n, 1100);
     if (deepFittedModesFound >= 3)
-      //printf("%d\n", deepFittedModesFound);
       return true;
   }
 
@@ -171,7 +170,8 @@ int primeModeSearch(int l, int n, int depth)
   bool foundRight = false;
   int found = 0;
   int i;
-  
+
+  // searches for modes in 4 directions across 2D array and marks the directions found as true
   for (i = 0; i < depth; i++)
   {
     if (n + i <= NCOLUMNS && modes[l][n + i].fitted) foundRight = true; // right
@@ -180,6 +180,7 @@ int primeModeSearch(int l, int n, int depth)
     if (l + i <= LROWS && modes[l + i][n].fitted) foundBottom = true; // bottom
   }
 
+  // sets number of found modes
   if (foundTop) found++;
   if (foundBottom) found++;
   if (foundLeft) found++;
