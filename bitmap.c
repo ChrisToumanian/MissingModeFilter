@@ -7,7 +7,7 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char data[w][h])
   FILE *f;
   unsigned char *image = NULL;
   int fileSize = 54 + 3 * w * h;
-  int i;
+  int i, j;
 
   // bitmap header values
   unsigned char fileHeader[14] = {'B', 'M', 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0};
@@ -37,7 +37,7 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char data[w][h])
   // sets single value to RGB (black & white) for each element of image
   for (i = 0; i < w; i++)
   {
-    for (int j = 0; j < h; j++)
+    for (j = 0; j < h; j++)
     {
       int x = i;
       int y = j;
