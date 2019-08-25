@@ -70,33 +70,33 @@ void addModesFromFile(char *file, bool fitted, bool missing, bool hasRedundantVa
 
   // opens file and checks if it exists
   if ((fptr = fopen(file, "r")) == NULL)
-  {
-    printf("%s%s\n", "File does not exist: ", file);
-    return;
-  }
+    {
+      printf("%s%s\n", "File does not exist: ", file);
+      return;
+    }
 
   // loops through file by newlines
   if (!hasRedundantValues)
-  {
-    while (fgets(line, sizeof(line), fptr))
     {
-      l = strtok(line, " "); // sets l value
-      n = strtok(NULL, " "); // sets n value
-      modes[atoi(l)][atoi(n)].fitted = fitted;
-      modes[atoi(l)][atoi(n)].missing = missing;
+      while (fgets(line, sizeof(line), fptr))
+	{
+	  l = strtok(line, " "); // sets l value
+	  n = strtok(NULL, " "); // sets n value
+	  modes[atoi(l)][atoi(n)].fitted = fitted;
+	  modes[atoi(l)][atoi(n)].missing = missing;
+	}
     }
-  }
   else // has redundant values
-  {
-    while (fgets(line, sizeof(line), fptr))
     {
-      l = strtok(line, " "); // sets l value
-      l = strtok(NULL, " "); // sets 2nd l value
-      n = strtok(NULL, " "); // sets n value
-      modes[atoi(l)][atoi(n)].fitted = fitted;
-      modes[atoi(l)][atoi(n)].missing = missing;
+      while (fgets(line, sizeof(line), fptr))
+	{
+	  l = strtok(line, " "); // sets l value
+	  l = strtok(NULL, " "); // sets 2nd l value
+	  n = strtok(NULL, " "); // sets n value
+	  modes[atoi(l)][atoi(n)].fitted = fitted;
+	  modes[atoi(l)][atoi(n)].missing = missing;
+	}
     }
-  }
 
   // closes file
   fclose(fptr);
@@ -111,9 +111,9 @@ void findModesToBeFitted()
     for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].missing)
-      {
-        modes[l][n].toBeFitted = isFittable(l, n);
-      }
+	    {
+	      modes[l][n].toBeFitted = isFittable(l, n);
+	    }
     }
   }
 }
@@ -137,7 +137,7 @@ bool isFittable(int l, int n)
   {
     int deepFittedModesFound = primeModeSearch(l, n, 1100);
     if (deepFittedModesFound >= 3)
-      return true;
+	return true;
   }
 
   return false;
@@ -164,33 +164,33 @@ int primeModeSearch(int l, int n, int depth)
 
   // search down
   for (i = 0; i < depth; i++)
-  {
-    if (l + i <= LROWS && modes[l + i][n].fitted)
     {
-      foundDown = true;
-      break;
+      if (l + i <= LROWS && modes[l + i][n].fitted)
+	{
+	  foundDown = true;
+	  break;
+	}
     }
-  }
 
   // search left
   for (i = 0; i < depth; i++)
-  {
-    if (n - i >= 0 && modes[l][n - i].fitted)
     {
-      foundLeft = true;
-      break;
+      if (n - i >= 0 && modes[l][n - i].fitted)
+	{
+	  foundLeft = true;
+	  break;
+	}
     }
-  }
 
   // search right
   for (i = 0; i < depth; i++)
-  {
-    if (n + i <= NCOLUMNS && modes[l][n + i].fitted)
     {
-      foundRight = true;
-      break;
+      if (n + i <= NCOLUMNS && modes[l][n + i].fitted)
+	{
+	  foundRight = true;
+	  break;
+	}
     }
-  }
   
   // sets number of found modes
   if (foundUp) found++;
@@ -205,43 +205,43 @@ void printModesToBeFitted()
 {
   int l, n;
   for (l = 0; l < LROWS; l++)
-  {
-    for (n = 0; n < NCOLUMNS; n++)
     {
-      if (modes[l][n].toBeFitted)
-      {
-        printf("%d%s%d\n", l, " ", n);
-      }
+      for (n = 0; n < NCOLUMNS; n++)
+	{
+	  if (modes[l][n].toBeFitted)
+	    {
+	      printf("%d%s%d\n", l, " ", n);
+	    }
+	}
     }
-  }
 }
 
 void printAllModes()
 {
   int l, n;
   for (l = 0; l < LROWS; l++)
-  {
-    for (n = 0; n < NCOLUMNS; n++)
     {
-      if (modes[l][n].fitted)
-      {
-        printf("1 ");
-      }
-      else if (modes[l][n].toBeFitted)
-      {
-        printf("2 ");
-      }
-      else if (modes[l][n].missing)
-      {
-        printf("3 ");
-      }
-      else
-      {
-        printf("0 ");
-      }
+      for (n = 0; n < NCOLUMNS; n++)
+	{
+	  if (modes[l][n].fitted)
+	    {
+	      printf("1 ");
+	    }
+	  else if (modes[l][n].toBeFitted)
+	    {
+	      printf("2 ");
+	    }
+	  else if (modes[l][n].missing)
+	    {
+	      printf("3 ");
+	    }
+	  else
+	    {
+	      printf("0 ");
+	    }
+	}
+      printf("\n");
     }
-    printf("\n");
-  }
 }
 
 void exportImage()
@@ -259,21 +259,21 @@ void exportImage()
     for (n = 0; n < NCOLUMNS; n++)
     {
       if (modes[l][n].toBeFitted)
-      {
-	image[l][n] = toBeFittedColor;
-      }
+        {
+          image[l][n] = toBeFittedColor;
+        }
       else if (modes[l][n].fitted)
-      {
-	image[l][n] = fittedColor;
-      }
+        {
+          image[l][n] = fittedColor;
+        }
       else if (modes[l][n].missing)
-      {
-	image[l][n] = missingColor;
-      }
+        {
+          image[l][n] = missingColor;
+        }
       else
-      {
-	image[l][n] = nullColor;
-      }
+        {
+          image[l][n] = nullColor;
+        }
     }
   }
 

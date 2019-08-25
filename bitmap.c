@@ -36,20 +36,20 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char data[w][h])
 
   // sets single value to RGB (black & white) for each element of image
   for (i = 0; i < w; i++)
-  {
-    for (j = 0; j < h; j++)
     {
-      int x = i;
-      int y = j;
-      int r = data[i][j];
-      int g = data[i][j];
-      int b = data[i][j];
+      for (j = 0; j < h; j++)
+	{
+	  int x = i;
+	  int y = j;
+	  int r = data[i][j];
+	  int g = data[i][j];
+	  int b = data[i][j];
 
-      image[(x + y * w) * 3 + 2] = (unsigned char)(r);
-      image[(x + y * w) * 3 + 1] = (unsigned char)(g);
-      image[(x + y * w) * 3 + 0] = (unsigned char)(b);
+	  image[(x + y * w) * 3 + 2] = (unsigned char)(r);
+	  image[(x + y * w) * 3 + 1] = (unsigned char)(g);
+	  image[(x + y * w) * 3 + 0] = (unsigned char)(b);
+	}
     }
-  }
   
   // open or create file and write header
   f = fopen(filename, "wb");
@@ -58,10 +58,10 @@ void saveImageBitmap(char* filename, int w, int h, unsigned char data[w][h])
 
   // write image data to file
   for (i = 0; i < h; i++)
-  {
-    fwrite(image + (w * (h - i - 1) * 3), 3, w, f);
-    fwrite(pad, 1, (4 - (w * 3) % 4 ) % 4, f);
-  }
+    {
+      fwrite(image + (w * (h - i - 1) * 3), 3, w, f);
+      fwrite(pad, 1, (4 - (w * 3) % 4 ) % 4, f);
+    }
 
   // deallocate image memory and close file
   free(image);
